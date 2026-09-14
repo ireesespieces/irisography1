@@ -1,0 +1,41 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #F7F3EC;
+}
+
+::selection {
+  background: #8C3B27;
+  color: #F7F3EC;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+.frame-in {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: frameIn 0.7s ease forwards;
+}
+
+@keyframes frameIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

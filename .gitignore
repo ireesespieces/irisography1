@@ -1,0 +1,29 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+
+# Local/NAS photo exports
+photos/
+media/
+uploads/
+nas/
+
+# Photo and video files
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.heic
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Local development and editor files
+node_modules/
+.vscode/*
+!.vscode/settings.example.json
+*.log
+
