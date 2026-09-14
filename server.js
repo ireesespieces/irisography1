@@ -1,24 +1,4 @@
-// Minimal JSON API for a folder of photos on the NAS.
-//
-// Layout expected on disk:
-//
-//   photos/
-//     video/
-//       Meridian Wireless -- Brand film, dir. -- 2023.jpg
-//       ...
-//     lifestyle/
-//       Sara.jpg                         <- client/year are optional
-//     beauty/
-//     editorial/
-//     personal/
-//
-// Filename convention (all parts after the title are optional):
-//   "Title -- Client -- Year.jpg"
-//   "Title.jpg"
-//
-// The folder name becomes the "cat" field used by the site's nav filter.
-// Orientation ("tall"/"wide") is detected from the actual image, not guessed.
-
+cat > server.js << 'EOF'
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -26,21 +6,16 @@ const fs = require('fs/promises');
 const sizeOf = require('image-size');
 
 const PORT = process.env.PORT || 4000;
-const PHOTOS_DIR = path.join(__dirname, 'photos');
+const PHOTOS_DIR = process.env.PHOTOS_DIR || '/mnt/raid/irisographywebsite';
 const IMAGE_EXT = new Set(['.jpg', '.jpeg', '.png', '.webp']);
 
 const app = express();
 
-// Allow the site (served from a different origin/port) to fetch this API.
-// Lock this down to your actual site origin once it has a fixed URL, e.g.:
-// app.use(cors({ origin: 'http://your-site.local' }));
 app.use(cors());
-
-// Serve the raw image files at /photos/<category>/<file>
 app.use('/photos', express.static(PHOTOS_DIR, { maxAge: '1d' }));
 
 function parseFilename(filename) {
-  const base = path.parse(filename).name; // strips extension
+  const base = path.parse(filename).name;
   const parts = base.split('--').map(s => s.trim());
   const [title, client, year] = parts;
   return {
@@ -77,11 +52,7 @@ async function buildWorkList() {
       const { title, client, year } = parseFilename(file);
 
       items.push({
-        title,
-        client,
-        year,
-        tall,
-        cat,
+        title, client, year, tall, cat,
         image: `/photos/${encodeURIComponent(cat)}/${encodeURIComponent(file)}`,
       });
     }
@@ -108,3 +79,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`Photo API listening on http://0.0.0.0:${PORT}`);
   console.log(`Photos served from: ${PHOTOS_DIR}`);
 });
+EOF
