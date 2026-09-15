@@ -20,33 +20,6 @@ const NAV = [
   { key: 'about', label: 'About' },
 ];
 
-const WORK = [
-  { title: 'Immigration Is Sacred', client: 'Personal project', year: 2025, tall: true, cat: 'personal' },
-  { title: 'The Polio Brothers', client: 'Short film, dir.', year: 2022, tall: false, cat: 'video' },
-  { title: 'De La Tierra', client: 'A.M.P. Magazine', year: 2021, tall: true, cat: 'editorial' },
-  { title: 'Vessel of Joy', client: 'Personal project', year: 2024, tall: false, cat: 'personal' },
-  { title: 'Libre Skincare', client: 'Brand film, dir.', year: 2023, tall: true, cat: 'video' },
-  { title: 'Four Generations', client: 'Personal project', year: 2023, tall: false, cat: 'personal' },
-  { title: 'Sara', client: 'Portrait study', year: 2022, tall: true, cat: 'lifestyle' },
-  { title: 'Rooted in Love', client: 'feat. Claudia Rivera', year: 2021, tall: false, cat: 'personal' },
-  { title: 'Butterfly Dreams', client: 'Personal project', year: 2024, tall: true, cat: 'lifestyle' },
-  { title: 'Amara Beauty x Nocturne', client: 'Campaign', year: 2023, tall: false, cat: 'beauty' },
-  { title: 'Vecinos Magazine', client: 'Editorial', year: 2022, tall: true, cat: 'editorial' },
-  { title: 'Futurism, Shot on Phone', client: 'Client work', year: 2024, tall: false, cat: 'lifestyle' },
-  { title: 'Meridian Wireless', client: 'Brand film, dir.', year: 2023, tall: true, cat: 'video' },
-  { title: 'Vecinos Magazine', client: 'Editorial', year: 2021, tall: false, cat: 'editorial' },
-  { title: 'Flanelle Magazine', client: 'Editorial', year: 2022, tall: true, cat: 'editorial' },
-  { title: 'Madres y Hijas', client: 'Heritage Month campaign', year: 2023, tall: false, cat: 'lifestyle' },
-  { title: 'El Poder De Las Trenzas', client: 'Personal project', year: 2025, tall: true, cat: 'personal' },
-  { title: 'Celeste', client: 'Portrait study', year: 2023, tall: false, cat: 'lifestyle' },
-  { title: 'Adolescent Content', client: 'Stock collaboration', year: 2022, tall: true, cat: 'lifestyle' },
-  { title: 'Angels of the Eastside', client: 'Tainted Magazine', year: 2021, tall: false, cat: 'editorial' },
-  { title: 'I Dream of Flowers', client: 'Personal project', year: 2024, tall: true, cat: 'beauty' },
-  { title: 'Into the Gloss', client: 'Editorial beauty', year: 2022, tall: false, cat: 'beauty' },
-  { title: 'She Dances in the Moonlight', client: 'Personal project', year: 2025, tall: true, cat: 'personal' },
-  { title: 'Image Magazine', client: 'feat. Stephanie, MU by S. Ruiz', year: 2022, tall: false, cat: 'editorial' },
-];
-
 function Tile({ item, index }) {
   const [c1, c2] = PALETTES[index % PALETTES.length];
   return (
@@ -104,34 +77,54 @@ function Gallery({ items }) {
   );
 }
 
-function AboutPanel() {
+function AboutPanel({ photo }) {
   return (
-    <div className="px-6 sm:px-10 py-14 max-w-2xl frame-in">
-      <h1 className="font-serif text-[2.1rem] sm:text-[2.6rem] leading-[1.1] mb-6">
-        Iris Chu is a photographer and video editor based in Los Angeles. 
-        
-      </h1>
-      <div className="space-y-5 text-[15px] leading-relaxed text-ink/80">
-        <p>
-          She is currently a student at Cal Poly Pomona, where she is pursuing a degree in engineering. 
-          In her free time, shes either exploring the city with her camera, creating new engineering projects, or editing videos for her YouTube channel.
-        </p>
-        <p>
-          If you are curious about her work or would like to collaborate, please reach out via email. She is always open to new opportunities and collaborations.
-        </p>
-      </div>
-      <div className="mt-10 pt-8 border-t border-ink/15 grid sm:grid-cols-2 gap-8 text-[15px]">
-        <div>
-          <p className="text-ink/50 mb-1">Contact</p>
-          <a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">
-            irischu2612+pportfolio@gmail.com
-          </a>
+    <div className="px-6 sm:px-10 py-14 grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+      <div className="max-w-2xl frame-in">
+        <h1 className="font-serif text-[2.1rem] sm:text-[2.6rem] leading-[1.1] mb-6">
+          Iris Chu is a photographer and video editor based in Los Angeles.
+        </h1>
+        <div className="space-y-5 text-[15px] leading-relaxed text-ink/80">
+          <p>
+            She is currently a student at Cal Poly Pomona, where she is pursuing a degree in engineering.
+            In her free time, shes either exploring the city with her camera, creating new engineering projects, or editing videos for her YouTube channel.
+          </p>
+          <p>
+            If you are curious about her work or would like to collaborate, please reach out via email. She is always open to new opportunities and collaborations.
+          </p>
+        </div>
+        <div className="mt-10 pt-8 border-t border-ink/15 grid sm:grid-cols-2 gap-8 text-[15px]">
+          <div>
+            <p className="text-ink/50 mb-1">Contact</p>
+            <a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">
+              irischu2612+pportfolio@gmail.com
+            </a>
+          </div>
+        </div>
+        <div className="mt-10 flex gap-5 text-[15px] text-ink/70">
+          <a href="#" className="hover:text-brick transition-colors">Instagram</a>
+          <a href="#" className="hover:text-brick transition-colors">Engineering Portfolio</a>
         </div>
       </div>
-      <div className="mt-10 flex gap-5 text-[15px] text-ink/70">
-        <a href="#" className="hover:text-brick transition-colors">Instagram</a>
-        <a href="#" className="hover:text-brick transition-colors">Engineering Portfolio</a>
-      </div>
+      {photo && (
+        <figure className="frame-in lg:pt-2">
+          <div className="aspect-[3/4] overflow-hidden rounded-sm bg-clay/20">
+            <img
+              src={photo.imageUrl}
+              alt={photo.title}
+              className="h-full w-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </div>
+          {photo.title && (
+            <figcaption className="mt-3 text-[13px] text-ink/60">
+              {photo.title}
+            </figcaption>
+          )}
+        </figure>
+      )}
     </div>
   );
 }
@@ -187,7 +180,7 @@ function App() {
       };
   }, []);
 
-  const work = serverWork.length ? serverWork : WORK;
+  const work = serverWork;
 
   const filtered = useMemo(() => {
     if (active === 'about') return work;
@@ -195,6 +188,7 @@ function App() {
   }, [active, work]);
 
   const isAbout = active === 'about';
+  const aboutPhoto = work.find(item => item.cat === 'about');
 
   useEffect(() => { setMenuOpen(false); }, [active]);
 
@@ -252,7 +246,7 @@ function App() {
             Server photos are unavailable; showing the local gallery.
           </p>
         )}
-        {isAbout ? <AboutPanel /> : <Gallery items={filtered} key={active} />}
+        {isAbout ? <AboutPanel photo={aboutPhoto} /> : <Gallery items={filtered} key={active} />}
       </main>
     </div>
   );
