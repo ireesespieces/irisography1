@@ -4,12 +4,14 @@
   "description": "Serves photos from a NAS folder as a JSON endpoint for the portfolio site",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "warm-cache": "node warm-cache.js"
   },
   "dependencies": {
-  "cors": "^2.8.5",
-  "exifr": "^7.1.3",
-  "express": "^4.19.2",
-  "image-size": "^1.1.1"
+    "cors": "^2.8.5",
+    "exifr": "^7.1.3",
+    "express": "^4.19.2",
+    "image-size": "^1.1.1",
+    "sharp": "^0.33.4"
   }
 }
