@@ -97,7 +97,7 @@ function AboutPanel({ photo }) {
           <div>
             <p className="text-ink/50 mb-1">Contact</p>
             <a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">
-              irischu2612@gmail.com
+              irischu2612@gmail.com 
             </a>
           </div>
         </div>
