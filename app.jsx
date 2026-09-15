@@ -79,12 +79,12 @@ function Gallery({ items }) {
 
 function AboutPanel({ photo }) {
   return (
-    <div className="px-6 sm:px-10 py-14 grid gap-12 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+    <div className="mx-auto px-6 sm:px-10 py-14 grid gap-6 lg:max-w-[820px] lg:grid-cols-[minmax(0,1fr)_270px] lg:gap-10">
       <div className="max-w-2xl frame-in">
-        <h1 className="font-serif text-[2.1rem] sm:text-[2.6rem] leading-[1.1] mb-6">
+        <h1 className="font-serif text-[2.6rem] sm:text-[3.2rem] leading-[1.08] mb-7">
           Iris Chu is a photographer and video editor based in Los Angeles.
         </h1>
-        <div className="space-y-5 text-[15px] leading-relaxed text-ink/80">
+        <div className="space-y-6 text-[17px] leading-relaxed text-ink/80">
           <p>
             She is currently a student at Cal Poly Pomona, where she is pursuing a degree in engineering.
             In her free time, shes either exploring the city with her camera, creating new engineering projects, or editing videos for her YouTube channel.
@@ -93,7 +93,7 @@ function AboutPanel({ photo }) {
             If you are curious about her work or would like to collaborate, please reach out via email. She is always open to new opportunities and collaborations.
           </p>
         </div>
-        <div className="mt-10 pt-8 border-t border-ink/15 grid sm:grid-cols-2 gap-8 text-[15px]">
+        <div className="mt-10 pt-8 border-t border-ink/15 grid sm:grid-cols-2 gap-8 text-[17px]">
           <div>
             <p className="text-ink/50 mb-1">Contact</p>
             <a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">
@@ -101,28 +101,23 @@ function AboutPanel({ photo }) {
             </a>
           </div>
         </div>
-        <div className="mt-10 flex gap-5 text-[15px] text-ink/70">
+        <div className="mt-10 flex gap-5 text-[17px] text-ink/70">
           <a href="#" className="hover:text-brick transition-colors">Instagram</a>
           <a href="#" className="hover:text-brick transition-colors">Engineering Portfolio</a>
         </div>
       </div>
       {photo && (
-        <figure className="frame-in lg:pt-2">
-          <div className="aspect-[3/4] overflow-hidden rounded-sm bg-clay/20">
+        <figure className="frame-in w-full self-start lg:pt-2">
+          <div className="w-full overflow-hidden rounded-sm bg-clay/20">
             <img
               src={photo.imageUrl}
               alt={photo.title}
-              className="h-full w-full object-cover"
+              className="block h-auto w-full object-contain"
               loading="eager"
               fetchPriority="high"
               decoding="async"
             />
           </div>
-          {photo.title && (
-            <figcaption className="mt-3 text-[13px] text-ink/60">
-              {photo.title}
-            </figcaption>
-          )}
         </figure>
       )}
     </div>
