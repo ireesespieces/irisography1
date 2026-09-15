@@ -97,7 +97,7 @@ function AboutPanel({ photo }) {
           <div>
             <p className="text-ink/50 mb-1">Contact</p>
             <a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">
-              irischu2612+pportfolio@gmail.com
+              irischu2612@gmail.com
             </a>
           </div>
         </div>
@@ -230,7 +230,7 @@ function App() {
             <a href="https://www.instagram.com/irisphotos.jpeg/" className="hover:text-brick transition-colors">Instagram</a>
             <a href="#" className="hover:text-brick transition-colors">Engineering Portfolio</a>
           </div>
-          <p>Contact<br /><a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">irischu2612+pportfolio@gmail.com</a></p>
+          <p>Contact<br /><a href="mailto:irischu2612+pportfolio@gmail.com" className="hover:text-brick transition-colors">irischu2612@gmail.com</a></p>
         </div>
       </header>
 
