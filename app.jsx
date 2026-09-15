@@ -87,7 +87,7 @@ function AboutPanel({ photo }) {
         <div className="space-y-6 text-[17px] leading-relaxed text-ink/80">
           <p>
             She is currently a student at Cal Poly Pomona, where she is pursuing a degree in engineering.
-            In her free time, shes either exploring the city with her camera, creating new engineering projects, or editing videos for her YouTube channel.
+            In her free time, she's either exploring the city with her camera, creating new engineering projects, or editing videos for her YouTube channel.
           </p>
           <p>
             If you are curious about her work or would like to collaborate, please reach out via email. She is always open to new opportunities and collaborations.
