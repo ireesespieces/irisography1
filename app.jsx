@@ -1,9 +1,18 @@
 const { useState, useMemo, useEffect } = React;
 
-const PHOTOS_ENDPOINT = window.IRISOGRAPHY_PHOTOS_ENDPOINT || '/api/photos';
+
+const WORK_ENDPOINT = 'https://paxatori.tail5b8364.ts.net/api/work';
+
+const PALETTES = [
+  ['#C6A78D', '#6E7457'],
+  ['#D8B7A1', '#8C3B27'],
+  ['#B7C0B0', '#66705B'],
+  ['#E1C8A8', '#B96A46'],
+  ['#A9B7C0', '#5C6970'],
+  ['#D7C5B5', '#806B5D'],
+];
 
 const NAV = [
-  { key: 'selected-works', label: 'Selected Works' },
   { key: 'portraits', label: 'Portraits' },
   { key: 'sports', label: 'Sports' },
   { key: 'street', label: 'Street' },
@@ -56,7 +65,9 @@ function Tile({ item, index }) {
             src={item.imageUrl}
             alt={item.title}
             className="absolute inset-0 h-full w-full object-cover"
-            loading="lazy"
+            loading={index < 3 ? 'eager' : 'lazy'}
+            fetchPriority={index < 3 ? 'high' : 'low'}
+            decoding="async"
           />
         )}
         <svg
@@ -132,17 +143,19 @@ function Logo({ className }) {
     </div>
   );
 }
-
+const API_ORIGIN = new URL(WORK_ENDPOINT).origin;
 function App() {
-  const [active, setActive] = useState('all');
+  const [active, setActive] = useState('selected-works');
   const [menuOpen, setMenuOpen] = useState(false);
   const [serverWork, setServerWork] = useState([]);
   const [photosError, setPhotosError] = useState('');
 
   useEffect(() => {
     let cancelled = false;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
 
-    fetch(PHOTOS_ENDPOINT)
+    fetch(WORK_ENDPOINT, { signal: controller.signal })
       .then(response => {
         if (!response.ok) throw new Error(`Photo request failed (${response.status})`);
         return response.json();
@@ -152,29 +165,32 @@ function App() {
         if (!Array.isArray(photos)) throw new Error('Photo response must be an array or contain a photos array');
 
         const normalizedPhotos = photos
-          .filter(photo => photo && typeof (photo.url || photo.imageUrl) === 'string' && (photo.url || photo.imageUrl).trim())
+          .filter(photo => photo && typeof photo.image === 'string' && photo.image.trim())
           .map((photo, index) => ({
             title: photo.title || `Server photo ${index + 1}`,
-            client: photo.client || 'Server gallery',
             year: photo.year || '',
             tall: photo.tall !== false,
-            cat: NAV.some(category => category.key === photo.cat) ? photo.cat : 'lifestyle',
-            imageUrl: photo.url || photo.imageUrl,
+            cat: typeof photo.cat === 'string' && photo.cat.trim() ? photo.cat : 'lifestyle',
+            imageUrl: photo.image.startsWith('http') ? photo.image : `${API_ORIGIN}${photo.image}`,
           }));
 
         if (!cancelled) setServerWork(normalizedPhotos);
       })
       .catch(error => {
-        if (!cancelled) setPhotosError(error.message);
+          if (!cancelled && error.name !== 'AbortError') setPhotosError(error.message);
       });
 
-    return () => { cancelled = true; };
+      return () => {
+        cancelled = true;
+        clearTimeout(timeout);
+        controller.abort();
+      };
   }, []);
 
   const work = serverWork.length ? serverWork : WORK;
 
   const filtered = useMemo(() => {
-    if (active === 'all' || active === 'about') return work;
+    if (active === 'about') return work;
     return work.filter(w => w.cat === active);
   }, [active, work]);
 
@@ -188,7 +204,7 @@ function App() {
       {/* ---------- Left rail ---------- */}
       <header className="lg:w-64 lg:fixed lg:inset-y-0 lg:border-r border-ink/10 bg-sand z-20">
         <div className="flex items-center justify-between px-5 py-5 lg:block lg:px-8 lg:py-10">
-          <button onClick={() => setActive('all')} className="text-left">
+          <button onClick={() => setActive('selected-works')} className="text-left">
             <Logo className="text-xl" />
           </button>
           <button

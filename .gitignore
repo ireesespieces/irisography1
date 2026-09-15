@@ -26,4 +26,5 @@ node_modules/
 .vscode/*
 !.vscode/settings.example.json
 *.log
-
+node_modules/
+cache/
