@@ -58,12 +58,6 @@ function Tile({ item, index }) {
           </defs>
           <rect width="100" height="100" filter={`url(#grain-${index})`} />
         </svg>
-        <div className="absolute inset-0 flex items-end p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-gradient-to-t from-black/55 via-black/0 to-black/0">
-          <p className="text-sand text-[13px] leading-snug">
-            <span className="font-medium">{item.title}</span>
-            <span className="block text-sand/80">{item.client} · {item.year}</span>
-          </p>
-        </div>
       </div>
     </figure>
   );
