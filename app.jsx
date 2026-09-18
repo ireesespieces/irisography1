@@ -16,12 +16,17 @@ const NAV = [
   { key: 'portraits', label: 'Portraits' },
   { key: 'sports', label: 'Sports' },
   { key: 'street', label: 'Street' },
-  { key: 'landscape', label: 'Landscape' },
+  { key: 'video', label: 'Videos' },
   { key: 'about', label: 'About' },
 ];
 
+function isVideo(item) {
+  return item.mediaType === 'video' || /\.(mp4|webm|ogg|mov|m4v)$/i.test(item.mediaUrl || item.imageUrl || '');
+}
+
 function Tile({ item, index }) {
   const [c1, c2] = PALETTES[index % PALETTES.length];
+  const video = isVideo(item);
   return (
     <figure
       className="group relative mb-4 break-inside-avoid overflow-hidden rounded-sm frame-in"
@@ -33,7 +38,7 @@ function Tile({ item, index }) {
           background: `linear-gradient(155deg, ${c1} 0%, ${c2} 100%)`,
         }}
       >
-        {item.imageUrl && (
+        {item.imageUrl && !video && (
           <img
             src={item.imageUrl}
             alt={item.title}
@@ -41,6 +46,16 @@ function Tile({ item, index }) {
             loading={index < 3 ? 'eager' : 'lazy'}
             fetchPriority={index < 3 ? 'high' : 'low'}
             decoding="async"
+          />
+        )}
+        {item.imageUrl && video && (
+          <video
+            src={item.imageUrl}
+            className="absolute inset-0 h-full w-full object-cover"
+            controls
+            playsInline
+            preload="metadata"
+            aria-label={item.title}
           />
         )}
         <svg
@@ -72,6 +87,7 @@ function Gallery({ items }) {
 }
 
 function AboutPanel({ photo }) {
+  const video = photo && isVideo(photo);
   return (
     <div className="mx-auto px-6 sm:px-10 py-14 grid gap-6 lg:max-w-[820px] lg:grid-cols-[minmax(0,1fr)_270px] lg:gap-10">
       <div className="max-w-2xl frame-in">
@@ -103,14 +119,25 @@ function AboutPanel({ photo }) {
       {photo && (
         <figure className="frame-in w-full self-start lg:pt-2">
           <div className="w-full overflow-hidden rounded-sm bg-clay/20">
-            <img
-              src={photo.imageUrl}
-              alt={photo.title}
-              className="block h-auto w-full object-contain"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-            />
+            {video ? (
+              <video
+                src={photo.imageUrl}
+                className="block h-auto w-full object-contain"
+                controls
+                playsInline
+                preload="metadata"
+                aria-label={photo.title}
+              />
+            ) : (
+              <img
+                src={photo.imageUrl}
+                alt={photo.title}
+                className="block h-auto w-full object-contain"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
+            )}
           </div>
         </figure>
       )}
@@ -153,6 +180,7 @@ function App() {
             year: photo.year || '',
             tall: photo.tall !== false,
             cat: typeof photo.cat === 'string' && photo.cat.trim() ? photo.cat : 'lifestyle',
+            mediaType: photo.mediaType === 'video' ? 'video' : 'image',
             imageUrl: photo.image.startsWith('http') ? photo.image : `${API_ORIGIN}${photo.image}`,
           }));
 
@@ -188,7 +216,7 @@ function App() {
       <header className="lg:w-64 lg:fixed lg:inset-y-0 lg:border-r border-ink/10 bg-sand z-20">
         <div className="flex items-center justify-between px-5 py-5 lg:block lg:px-8 lg:py-10">
           <button onClick={() => setActive('selected-works')} className="text-left">
-            <Logo className="text-xl" />
+            <Logo className="text-2xl" />
           </button>
           <button
             className="lg:hidden text-ink"
