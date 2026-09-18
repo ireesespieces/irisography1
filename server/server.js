@@ -146,10 +146,6 @@ app.get('/videos/:cat/:file', (req, res) => {
   });
 });
 
-function titleFromFilename(filename) {
-  return path.parse(filename).name; // strips extension
-}
-
 async function getYearFromExif(filePath) {
   try {
     const exif = await exifr.parse(filePath, ['DateTimeOriginal', 'CreateDate']);
@@ -183,7 +179,6 @@ async function buildWorkList() {
     for (const file of files) {
       const ext = path.extname(file).toLowerCase();
       const filePath = path.join(catPath, file);
-      const title = titleFromFilename(file);
 
       if (IMAGE_EXT.has(ext)) {
         let tall = true;
@@ -197,7 +192,7 @@ async function buildWorkList() {
         const year = await getYearFromExif(filePath);
 
         items.push({
-          title, year, tall, cat,
+          year, tall, cat,
           video: false,
           image: `/photos/${encodeURIComponent(cat)}/${encodeURIComponent(file)}`,
         });
@@ -215,7 +210,7 @@ async function buildWorkList() {
         const year = await getYearFromFileDate(filePath);
 
         items.push({
-          title, year, tall, cat,
+          year, tall, cat,
           video: true,
           poster: `/video-poster/${encodeURIComponent(cat)}/${encodeURIComponent(file)}`,
           src: `/videos/${encodeURIComponent(cat)}/${encodeURIComponent(file)}`,
@@ -251,7 +246,7 @@ async function startServer() {
       // Video posters are already generated inside buildWorkList above,
       // since we need to read the poster's dimensions there anyway.
     } catch (err) {
-      console.error(`Startup optimization failed for ${item.title}:`, err.message);
+      console.error(`Startup optimization failed for ${item.image || item.src}:`, err.message);
     }
   }
 

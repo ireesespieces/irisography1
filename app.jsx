@@ -21,58 +21,47 @@ const NAV = [
 ];
 
 function isVideo(item) {
-  return item.mediaType === 'video' || /\.(mp4|webm|ogg|mov|m4v)$/i.test(item.mediaUrl || item.imageUrl || '');
+  return item.video === true ||
+    item.mediaType === 'video' ||
+    /\.(mp4|webm|ogg|mov|m4v)$/i.test(item.mediaUrl || item.src || item.imageUrl || '');
 }
 
 function Tile({ item, index }) {
-  const [c1, c2] = PALETTES[index % PALETTES.length];
-  const video = isVideo(item);
+  const videoRef = React.useRef(null);
+
   return (
     <figure
-      className="group relative mb-4 break-inside-avoid overflow-hidden rounded-sm frame-in"
+      className="group relative mb-4 break-inside-avoid overflow-hidden rounded-sm bg-ink/5 frame-in"
       style={{ animationDelay: `${(index % 9) * 60}ms` }}
     >
-      <div
-        className={`relative w-full ${item.tall ? 'aspect-[3/4]' : 'aspect-[4/3]'} overflow-hidden`}
-        style={{
-          background: `linear-gradient(155deg, ${c1} 0%, ${c2} 100%)`,
-        }}
-      >
-        {item.imageUrl && !video && (
+      <div className={`relative w-full ${item.tall ? 'aspect-[3/4]' : 'aspect-[4/3]'} overflow-hidden`}>
+        {item.video ? (
+          <video
+            ref={videoRef}
+            src={imageUrl(item.src)}
+            poster={imageUrl(item.poster)}
+            className="absolute inset-0 h-full w-full object-cover"
+            muted
+            loop
+            playsInline
+            preload="none"
+            onMouseEnter={() => videoRef.current && videoRef.current.play()}
+            onMouseLeave={() => {
+              if (videoRef.current) {
+                videoRef.current.pause();
+                videoRef.current.currentTime = 0;
+              }
+            }}
+            controls
+          />
+        ) : (
           <img
             src={item.imageUrl}
-            alt={item.title}
-            className="absolute inset-0 h-full w-full object-cover"
-            loading={index < 3 ? 'eager' : 'lazy'}
-            fetchPriority={index < 3 ? 'high' : 'low'}
-            decoding="async"
+            alt=""
+            loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         )}
-        {item.imageUrl && video && (
-          <video
-            src={item.imageUrl}
-            className="absolute inset-0 h-full w-full object-cover"
-            controls
-            playsInline
-            preload="metadata"
-            aria-label={item.title}
-          />
-        )}
-        <svg
-          className={`absolute inset-0 h-full w-full mix-blend-overlay ${
-            item.imageUrl ? 'opacity-10' : 'opacity-20'
-          }`}
-          preserveAspectRatio="none"
-          viewBox="0 0 100 100"
-        >
-          <defs>
-            <filter id={`grain-${index}`}>
-              <feTurbulence baseFrequency="0.9" numOctaves="2" seed={index} />
-              <feColorMatrix type="saturate" values="0" />
-            </filter>
-          </defs>
-          <rect width="100" height="100" filter={`url(#grain-${index})`} />
-        </svg>
       </div>
     </figure>
   );
@@ -153,6 +142,12 @@ function Logo({ className }) {
   );
 }
 const API_ORIGIN = new URL(WORK_ENDPOINT).origin;
+
+function imageUrl(url) {
+  if (!url) return '';
+  return url.startsWith('http') ? url : `${API_ORIGIN}${url}`;
+}
+
 function App() {
   const [active, setActive] = useState('selected-works');
   const [menuOpen, setMenuOpen] = useState(false);
@@ -174,14 +169,22 @@ function App() {
         if (!Array.isArray(photos)) throw new Error('Photo response must be an array or contain a photos array');
 
         const normalizedPhotos = photos
-          .filter(photo => photo && typeof photo.image === 'string' && photo.image.trim())
+          .filter(photo => photo && (
+            (typeof photo.image === 'string' && photo.image.trim()) ||
+            (typeof photo.src === 'string' && photo.src.trim())
+          ))
           .map((photo, index) => ({
-            title: photo.title || `Server photo ${index + 1}`,
+            title: photo.title || `Server media ${index + 1}`,
             year: photo.year || '',
             tall: photo.tall !== false,
-            cat: typeof photo.cat === 'string' && photo.cat.trim() ? photo.cat : 'lifestyle',
-            mediaType: photo.mediaType === 'video' ? 'video' : 'image',
-            imageUrl: photo.image.startsWith('http') ? photo.image : `${API_ORIGIN}${photo.image}`,
+            cat: isVideo(photo)
+              ? 'video'
+              : (typeof photo.cat === 'string' && photo.cat.trim() ? photo.cat : 'lifestyle'),
+            video: isVideo(photo),
+            mediaType: isVideo(photo) ? 'video' : 'image',
+            imageUrl: imageUrl(photo.image || photo.src),
+            src: imageUrl(photo.src || photo.image),
+            poster: imageUrl(photo.poster),
           }));
 
         if (!cancelled) setServerWork(normalizedPhotos);
