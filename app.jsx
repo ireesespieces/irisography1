@@ -101,7 +101,7 @@ function AboutPanel({ photo }) {
           </div>
         </div>
         <div className="mt-10 flex gap-5 text-[17px] text-ink/70">
-          <a href="#" className="hover:text-brick transition-colors">Instagram</a>
+          <a href="https://www.instagram.com/irisphotos.jpeg/" className="hover:text-brick transition-colors">Instagram</a>
           <a href="#" className="hover:text-brick transition-colors">Engineering Portfolio</a>
         </div>
       </div>
