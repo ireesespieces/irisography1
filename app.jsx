@@ -45,13 +45,6 @@ function Tile({ item, index }) {
             loop
             playsInline
             preload="none"
-            onMouseEnter={() => videoRef.current && videoRef.current.play()}
-            onMouseLeave={() => {
-              if (videoRef.current) {
-                videoRef.current.pause();
-                videoRef.current.currentTime = 0;
-              }
-            }}
             controls
           />
         ) : (
